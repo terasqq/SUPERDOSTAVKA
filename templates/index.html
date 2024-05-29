@@ -1,0 +1,18 @@
+{% extends "components/_base.html" %} {% load static %} {% block title %}
+Главная {% endblock title %} {% block content %}
+<div class="flex vertical gap-4 center px-16 pb-8">
+  <div class="flex vertical center">
+    <img src="{% static 'images/logo.png' %}" alt="" class="w-24 h-24" />
+    <p class="fs-4 bolder color-accent">SUPERDOSTAVKA</p>
+  </div>
+  <p class="fs-2 bold text-center">
+    Наша специализация– доставка грузов из Китая. Проводим таможенную очистку.
+  </p>
+  <p class="fs-1-half">
+    Компания SUPERDOSTAVKA обладает значительной практикой грузоперевозок. Мы
+    обладаем современными складами и подвижным составом, а также подготовленными
+    кадрами. Заказ у нас логистических услуг — гарантия Вашего успеха! Мы
+    поможем продвижению Вашего предприятия в конкурентной борьбе!
+  </p>
+</div>
+{% endblock content %}

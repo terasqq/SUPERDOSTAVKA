@@ -1,0 +1,42 @@
+{% extends "components/_base.html" %}
+
+{% block title %}
+Главная
+{% endblock title %}
+
+{% block content %}
+<div class="modal-box" id="add-product">
+    <div class="flex vertical br-1 bg-primary h-max-limit-90">
+        <div class="flex horizontal br-1 space-between">
+            <p class="fs-1-half py-1 px-2">Добавить категорию</p>
+            <a href="#" class="p-1 btn secondary">✖</a>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="flex vertical px-2 py-1 gap-1 scroll-y">
+            {% csrf_token %}
+            <label for="image" class="btn accent py-half px-1 rounded text-center">Выбрать изображение
+            <input type="file" id="image" name="image" accept="image/*" class="display-none"></label>
+
+            <label for="name">Название:</label>
+            <input type="text" id="name" name="name" maxlength="256" class="input-text py-half px-1">
+
+            <button type="submit" class="btn accent py-half fs-1-half rounded">Добавить</button>
+        </form>
+    </div>
+</div>
+<div class="flex horizontal px-4 py-1 z-10 s-max center bg-primary gap-1">
+    <div class="flex horizontal gap-1 scroll-x border-black rounded p-half s-max">
+        {% for category in categories %}
+        <a href="/catalog/{{ category.id }}" class="btn secondary px-1 py-half">{{ category.name }}</a>
+        {% endfor %}
+    </div>
+    <a href="#add-product" class="btn accent px-1 py-1 rounded white-space-nowrap">Добавить категорию</a>
+</div>
+<div class="grid col-auto px-8 py-2 gap-2">
+    {% for category in categories %}
+    <a href="/catalog/{{ category.id }}" class="flex vertical p-1 center btn secondary s-max">
+        <img src="{{ category.image.url }}" alt="" class="w-12 h-12 fit-cover">
+        <p class="fs-1-half w-max overflow-hidden text-center">{{ category.name }}</p>
+    </a>
+    {% endfor %}
+</div>
+{% endblock content %}

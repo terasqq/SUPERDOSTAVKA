@@ -1,0 +1,135 @@
+{% extends "components/_base.html" %}
+
+{% block title %}
+Главная
+{% endblock title %}
+
+{% block content %}
+<div class="modal-box" id="add-product">
+    <div class="flex vertical br-1 bg-primary h-max-limit-90 w-min-32">
+        <div class="flex horizontal br-1 space-between">
+            <p class="fs-1-half py-1 px-2">Добавить продукт</p>
+            <a href="#" class="p-1 btn secondary">✖</a>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="flex vertical px-2 py-1 gap-1 scroll-y">
+            {% csrf_token %}
+            
+            <label for="category">Категория:</label>
+            <select id="category" name="category" class="rounded py-half px-1">
+                {% for c in categories %}
+                <option value="{{ c.id }}" class="rounded py-half px-1" {% if c.id == category.id %}selected="selected"{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="image" class="btn accent py-half px-1 rounded text-center">Выбрать изображение
+            <input type="file" id="image" name="image" accept="image/*" class="display-none"></label>
+
+            <label for="name">Название:</label>
+            <input type="text" id="name" name="name" maxlength="256" class="input-text py-half px-1">
+
+            <label for="code">Код продукта:</label>
+            <input type="text" id="code" name="code" placeholder="XXXX-XXX-XXXXX" maxlength="64" class="input-text py-half px-1">
+
+            <label for="barcode">Штрихкод:</label>
+            <input type="number" id="barcode" name="barcode" placeholder="1234567890" class="input-text py-half px-1">
+
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" class="input-textarea py-half px-1"></textarea>
+
+            <label for="provider">Поставщик:</label>
+            <input type="text" id="provider" name="provider" maxlength="64" class="input-text py-half px-1">
+
+            <label for="purchase_price">Цена закупки:</label>
+            <input type="number" id="purchase_price" name="purchase_price" class="input-text py-half px-1">
+
+            <label for="selling_price">Цена продажи:</label>
+            <input type="number" id="selling_price" name="selling_price" class="input-text py-half px-1">
+
+            <label for="amount">Количество:</label>
+            <input type="number" id="amount" name="amount" value="1" class="input-text py-half px-1">
+
+            <button type="submit" class="btn accent py-half fs-1-half rounded">Добавить</button>
+        </form>
+    </div>
+</div>
+<div class="flex horizontal px-4 py-1 z-10 s-max center gap-2 bg-primary">
+    <a href="/catalog" class="btn accent center px-2 py-1 rounded white-space-nowrap">Все категории</a>
+    <div class="flex horizontal gap-1 scroll-x border-black rounded p-half s-max">
+        {% for c in categories %}
+        <a href="/catalog/{{ c.id }}" class="btn secondary px-1 py-half">{{ c.name }}</a>
+        {% endfor %}
+    </div>
+    <a href="#add-product" class="btn accent px-1 py-1 rounded white-space-nowrap">Добавить продукт</a>
+</div>
+<div class="flex vertical px-4 center">
+    <P class="fs-4">{{ category.name }}</P>
+    {% for product in products %}
+    <div class="flex horizontal center gap-1 py-half px-2 separate-y w-max">
+        <div class="grid col-6 w-max">
+            <img src="{{ product.image.url }}" alt="" class="fit-cover s-max br-1 h-3 w-3 center">
+            <span class="px-half overflow-hidden text-center h-max">{{ product.name }}</span>
+            <span class="px-half overflow-hidden text-center h-max">{{ product.provider }}</span>
+            <span class="px-half overflow-hidden text-center h-max">{{ product.code }}</span>
+            <span class="px-half overflow-hidden text-center h-max">{{ product.barcode }}</span>
+            <span class="px-half overflow-hidden text-center h-max">🔼 {{ product.selling_price }} KGS<br>🔽 {{ product.purchase_price }} KGS<br>{{ product.amount }} шт.</span>
+        </div>
+        <a href="#product-{{ product.id }}" class="btn accent py-half px-1">Изменить</a>
+        <div class="tooltip center w-3 h-3">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 center">
+                <path fill="none" stroke="#000000" stroke-width="1.25" d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,10 L12,18 M12,6 L12,8"/>
+                <p class="tooltiptext p-1 br-1 border-black">{{ product.description }}</p>
+            </svg>
+        </div>
+    </div>
+    <div class="modal-box" id="product-{{ product.id }}">
+        <div class="flex vertical br-1 bg-primary h-max-limit-90 w-min-32">
+            <div class="flex horizontal br-1 space-between">
+                <p class="fs-1-half py-1 px-2">Изменить продукт</p>
+                <a href="#" class="p-1 btn secondary">✖</a>
+            </div>
+            <form action="/editproduct/" method="post" enctype="multipart/form-data" class="flex vertical px-2 py-1 gap-1 scroll-y">
+                {% csrf_token %}
+                <input type="hidden" value="{{ product.id }}" name="pid">
+                
+                <label for="category{{ product.id }}">Категория:</label>
+                <select id="category{{ product.id }}" name="category" class="rounded py-half px-1">
+                    {% for c in categories %}
+                    <option value="{{ c.id }}" class="rounded py-half px-1" {% if c.id == product.category.id %}selected="selected"{% endif %}>{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+    
+                <label for="image{{ product.id }}" class="btn accent py-half px-1 rounded text-center">Выбрать изображение
+                <input type="file" id="image{{ product.id }}" name="image" class="display-none"></label>
+    
+                <label for="name{{ product.id }}">Название:</label>
+                <input type="text" id="name{{ product.id }}" name="name" maxlength="256" class="input-text py-half px-1" placeholder="{{ product.name }}">
+    
+                <label for="code{{ product.id }}">Код продукта:</label>
+                <input type="text" id="code{{ product.id }}" name="code" placeholder="{{ product.code }}" maxlength="64" class="input-text py-half px-1">
+    
+                <label for="barcode{{ product.id }}">Штрихкод:</label>
+                <input type="number" id="barcode{{ product.id }}" name="barcode" placeholder="{{ product.barcode }}" value="{{ product.barcode }}" class="input-text py-half px-1">
+    
+                <label for="description{{ product.id }}">Описание:</label>
+                <textarea id="description{{ product.id }}" name="description" class="input-textarea py-half px-1" placeholder="{{ product.description }}"></textarea>
+    
+                <label for="provider{{ product.id }}">Поставщик:</label>
+                <input type="text" id="provider{{ product.id }}" name="provider" maxlength="64" class="input-text py-half px-1" placeholder="{{ product.provider }}">
+    
+                <label for="purchase_price{{ product.id }}">Цена закупки:</label>
+                <input type="number" id="purchase_price{{ product.id }}" name="purchase_price" class="input-text py-half px-1" placeholder="{{ product.purchase_price }}" value="{{ product.purchase_price }}">
+    
+                <label for="selling_price{{ product.id }}">Цена продажи:</label>
+                <input type="number" id="selling_price{{ product.id }}" name="selling_price" class="input-text py-half px-1" placeholder="{{ product.selling_price }}" value="{{ product.selling_price }}">
+    
+                <label for="amount{{ product.id }}">Количество:</label>
+                <input type="number" id="amount{{ product.id }}" name="amount" placeholder="{{ product.amount }}" value="{{ product.amount }}" class="input-text py-half px-1">
+    
+                <button type="submit" class="btn accent py-half fs-1-half rounded">Сохранить изменения</button>
+                <a href="/catalog/{{ category.id }}/delete/{{ product.id }}" class="btn secondary py-1 px-1 text-center rounded fs-1-half">Удалить</a>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "components/_base.html" %} {% load static %} {% block title %} Связь
+{% endblock title %} {% block content %}
+<div class="flex vertical gap-4 center px-16 py-8">
+  <div class="flex vertical center">
+    <p class="fs-4 bolder color-accent">СВЯЗАТЬСЯ</p>
+  </div>
+  <p class="fs-2 bold text-center">
+    Вы можете связаться с нами по следующим контактам:
+  </p>
+  <div class="flex vertical center gap-4">
+    <div class="flex vertical gap-1 center">
+      <p class="fs-2 white-space-nowrap text-center">Адрес</p>
+      <p class="fs-1-half">Москва, Россия: ул. Профсоюзная, д. 123</p>
+      <p class="fs-1-half">Шанхай, Китай: ул. Нанкин, д. 456</p>
+      <p class="fs-1-half">Гуанчжоу, Китай: ул. Цзиньсяо, д. 789</p>
+      <p class="fs-1-half">Пекин, Китай: ул. Хайдян, д. 1011</p>
+    </div>
+    <div class="flex vertical gap-1 center">
+      <p class="fs-2 white-space-nowrap text-center">Номер телефона</p>
+      <p class="fs-1-half">+491234567890</p>
+      <p class="fs-1-half">+441234567890</p>
+      <p class="fs-1-half">+611234567890</p>
+    </div>
+    <div class="flex vertical gap-1 center">
+      <p class="fs-2 white-space-nowrap text-center">Электронная почта</p>
+      <p class="fs-1-half">support@sepurdostavka.com</p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

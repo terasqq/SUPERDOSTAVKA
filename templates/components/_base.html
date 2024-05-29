@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <title>{% block title %} {% endblock title %}</title>
+</head>
+<body>
+    <header class="z-100 bg-primary border-b-accent">
+        <div class="flex horizontal py-half px-4 space-between centery">
+            <div class="flex horizontal center">
+                <img src="{% static 'images/logo.png' %}" alt="" class="s-5">
+                <span class="fs-2 bolder color-accent">SUPERDOSTAVKA</span>
+            </div>
+
+            <ul class="flex horizontal gap-half scroll-x">
+                <li><a href="/" class="btn secondary px-1 py-half">Главная</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="/catalog" class="btn secondary px-1 py-half">Каталог</a></li>
+                {% endif %}
+                <li><a href="/contact" class="btn secondary px-1 py-half">Связаться</a></li>
+                <li><a href="/about" class="btn secondary px-1 py-half">О нас</a></li>
+            </ul>
+
+            <div class="flex horizontal center gap-1">
+                {% if user.is_authenticated %}
+                <p class="py-half px-1 fs-1-half">Привет, {{ user.username }}!</p>
+                <a href="/logout" class="btn accent px-1 py-half">Выйти</a>
+                {% else %}
+                <a href="#login" class="btn accent px-1 py-half">Войти</a>
+                <a href="#register" class="btn secondary px-1 py-half">Зарегистрироваться</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="modal-box" id="login">
+            <div class="flex vertical br-1 bg-primary h-max-limit-90 w-min-32">
+                <div class="flex horizontal br-1 space-between">
+                    <p class="fs-1-half py-1 px-2">Вход</p>
+                    <a href="#" class="p-1 btn secondary">✖</a>
+                </div>
+                <form action="/login/" method="post" enctype="multipart/form-data" class="flex vertical px-2 py-1 gap-1 scroll-y">
+                    {% csrf_token %}
+                    <label for="lusername">Имя пользователя:</label>
+                    <input type="text" id="lusername" name="username" maxlength="100" required class="input-text py-half px-1">
+                    <label for="lpassword">Пароль:</label>
+                    <input type="password" id="lpassword" name="password" required class="input-text py-half px-1">
+                    <button type="submit" class="btn accent py-half fs-1-half rounded">Войти</button>
+                </form>
+            </div>
+        </div>
+        <div class="modal-box" id="register">
+            <div class="flex vertical br-1 bg-primary h-max-limit-90 w-min-32">
+                <div class="flex horizontal br-1 space-between">
+                    <p class="fs-1-half py-1 px-2">Регистрация</p>
+                    <a href="#" class="p-1 btn secondary">✖</a>
+                </div>
+                <form action="/register/" method="post" enctype="multipart/form-data" class="flex vertical px-2 py-1 gap-1 scroll-y">
+                    {% csrf_token %}
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" name="username" maxlength="100" required class="input-text py-half px-1">
+                    <label for="email">Электронная почта:</label>
+                    <input type="email" id="email" name="email" required class="input-text py-half px-1">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" required class="input-text py-half px-1">
+                    <label for="confirm_password">Подтвердите пароль:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required class="input-text py-half px-1">
+                    <button type="submit" class="btn accent py-half fs-1-half rounded">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    {% block content %}
+    
+    {% endblock content %}
+        <footer class="grid col-3 bg-secondary gap-1">
+            <div class="flex vertical gap-1">
+                <a href="/" class="link">Главная</a></li>
+                {% if user.is_authenticated %}
+                <a href="/catalog" class="link">Каталог</a></li>
+                {% endif %}
+                <a href="/contact" class="link">Связаться</a></li>
+                <a href="/about" class="link">О нас</a></li>
+            </div>
+            <div class="flex vertical gap-1">
+                <p class="bold">Сайт был разработан Онюшкиным Романом</p>
+                <p>Логотип был украден из интернета</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
